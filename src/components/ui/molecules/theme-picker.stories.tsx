@@ -3,10 +3,6 @@ import useTheme from "@/hooks/useTheme"; // Import the hook
 import type { Meta, StoryObj } from "@storybook/nextjs";
 import ThemeColorPicker from "./theme-picker"; // Assuming the component is exported as default
 
-type MockedUseThemeReturn = {
-  color: string;
-  changeColor: (color: string) => void;
-};
 
 import { Mock, vi } from "vitest"; // Added import from vitest
 

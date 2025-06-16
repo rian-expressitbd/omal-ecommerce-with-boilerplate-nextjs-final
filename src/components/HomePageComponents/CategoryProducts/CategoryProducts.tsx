@@ -7,7 +7,7 @@ import Title from "../../ui/Title";
 import CategoryProductCard from "../../ui/CategoryProductCard";
 import Banner from "../Banner";
 import Link from "next/link";
-import { Product } from "@/types/product";
+import { Product } from "@/types/cart";
 
 export default function CategoryProducts() {
   const { businessData, isLoading } = useBusiness();

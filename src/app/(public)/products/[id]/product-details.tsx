@@ -15,9 +15,12 @@ export default function ProductDetail({ product }: ProductDetailProps) {
   const variants = product.variantsId;
 
   // If no variants (but one in array), treat that as only option
-  const defaultVariant = !hasVariants && variants.length === 1 ? variants[0] : null;
+  const defaultVariant =
+    !hasVariants && variants.length === 1 ? variants[0] : null;
 
-  const [selectedVariant, setSelectedVariant] = useState<Variant | null>(defaultVariant);
+  const [selectedVariant, setSelectedVariant] = useState<Variant | null>(
+    defaultVariant
+  );
   const [quantity, setQuantity] = useState(1);
 
   useEffect(() => {
@@ -37,24 +40,38 @@ export default function ProductDetail({ product }: ProductDetailProps) {
     setQuantity(1);
   };
 
-  const price = selectedVariant ? Number(selectedVariant.selling_price) : Number(variants[0]?.selling_price || 0);
-  const stock = selectedVariant ? selectedVariant.variants_stock : product.total_stock;
-  const imageUrl = selectedVariant ? selectedVariant.image.image.secure_url : product.images[0]?.image.secure_url;
+  const price = selectedVariant
+    ? Number(selectedVariant.selling_price)
+    : Number(variants[0]?.selling_price || 0);
+  const stock = selectedVariant?.variants_stock ?? product.total_stock ?? 0;
+  const imageUrl =
+    selectedVariant?.image?.image?.secure_url ||
+    product.images[0]?.image?.secure_url;
 
   return (
     <article className='grid grid-cols-1 md:grid-cols-2 gap-8'>
       <div className='relative aspect-square bg-gray-100 rounded-lg overflow-hidden'>
-        <Image src={imageUrl} alt={product.name} fill className='object-cover' priority />
+        <Image
+          src={imageUrl}
+          alt={product.name}
+          fill
+          className='object-cover'
+          priority
+        />
       </div>
 
       <div className='space-y-4'>
         <h1 className='text-3xl font-bold'>{product.name}</h1>
 
         <div className='flex items-center gap-4'>
-          <span className='text-2xl font-semibold text-primary'>${price.toFixed(2)}</span>
+          <span className='text-2xl font-semibold text-primary'>
+            ${price.toFixed(2)}
+          </span>
           <span
             className={`px-2 py-1 rounded text-sm ${
-              stock > 0 ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"
+              stock > 0
+                ? "bg-green-100 text-green-800"
+                : "bg-red-100 text-red-800"
             }`}
           >
             {stock > 0 ? "In Stock" : "Out of Stock"}
@@ -99,7 +116,11 @@ export default function ProductDetail({ product }: ProductDetailProps) {
           />
         </div>
 
-        <AddToCartBtn item={product} variant={selectedVariant || undefined} quantity={quantity} />
+        <AddToCartBtn
+          item={product}
+          variant={selectedVariant || undefined}
+          quantity={quantity}
+        />
 
         {product.short_description && (
           <div

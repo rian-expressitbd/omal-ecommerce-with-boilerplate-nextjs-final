@@ -8,6 +8,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "@/lib/store";
 
 interface NavbarMiddleProps {
+  isCartOpen: boolean;
   setIsCartOpen: (isOpen: boolean) => void;
 }
 

@@ -1,3 +1,4 @@
+import Image from "next/image";
 import React from "react";
 
 const Footer: React.FC = () => {
@@ -94,15 +95,19 @@ const Footer: React.FC = () => {
         <div className='mx-auto container flex justify-between items-center'>
           <p className='text-sm text-white'>© 2024. All Rights Reserved.</p>
           <div className='flex space-x-4 mt-4 md:mt-0 text-white' >
-            <img
+            <Image
+              width={1080}
+              height={720}
               src='https://upload.wikimedia.org/wikipedia/commons/4/41/Visa_Logo.png'
               alt='Visa'
-              className='h-8'
+              className='w-10 h-8'
             />
-            <img
+            <Image
+              width={1080}
+              height={720}
               src='https://upload.wikimedia.org/wikipedia/commons/b/b7/MasterCard_Logo.svg'
               alt='MasterCard'
-              className='h-8'
+              className='w-10 h-8'
             />
           </div>
         </div>

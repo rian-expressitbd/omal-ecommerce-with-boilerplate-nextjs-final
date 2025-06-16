@@ -10,7 +10,7 @@ export interface Product {
   name: string;
   short_description: string;
   images: { image: { optimizeUrl: string } }[];
-  video?: { secure_url: string };
+  video?: { secure_url: string }; // 👈 use this instead of `Video[]`
   variantsId: {
     _id: string;
     name?: string;
@@ -29,8 +29,20 @@ export interface Order {
   customer_phone: string;
   customer_address: string;
   delivery_area: string;
-  paymentMethod: string;
-  transactionId: string;
-  products: { productId: string; quantity: number }[];
-  due: string;
+  products: {
+    productId: string;
+    variantId?: string; // optional because sometimes variantId might be absent
+    quantity: number;
+    price?: number;
+    name?: string;
+  }[];
+  total_amount: number;
+  payment_method: string;
+  transaction_id: string | number | null;
+  status: string;
+  created_at: string;
+}
+export interface TCartItem {
+  productId: Product["variantsId"][number]["_id"];
+  quantity: number;
 }

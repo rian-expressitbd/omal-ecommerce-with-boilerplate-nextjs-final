@@ -1,9 +1,9 @@
-import React from "react";
+type CommonLayoutProps = {
+  children: React.ReactNode;
+};
 
-export default function CommonLayout({ children }) {
-  return (
-    <>
-      <div className='mx-auto w-full md:w-[85%]'>{children}</div>
-    </>
-  );
-}
+const CommonLayout = ({ children }: CommonLayoutProps) => {
+  return <div className='mx-auto w-full md:w-[85%]'>{children}</div>;
+};
+
+export default CommonLayout;

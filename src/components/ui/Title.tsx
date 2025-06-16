@@ -1,6 +1,9 @@
 import React from "react";
 
-export default function Title({ title }) {
+interface TitleProps {
+  title: string;
+}
+export default function Title({ title }: TitleProps) {
   return (
     <div className='flex items-center justify-center w-full py-4'>
       <div className='flex-1 h-px bg-black'></div>

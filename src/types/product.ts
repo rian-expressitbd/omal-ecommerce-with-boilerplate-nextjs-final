@@ -8,32 +8,31 @@ export interface ProductResponse {
   data: Product[];
 }
 
+export interface ProductImage {
+  image: {
+    secure_url?: string;
+  };
+}
+
 export interface Product {
   _id: string;
   name: string;
   short_description: string;
   long_description: string;
-  tags: string[];
-  images: Image[];
-  video: Video[];
-  brand: {
-    _id: string;
-    name: string;
-  };
-  sizeGuard?: {
-    _id: string;
-    name: string;
-  };
-  sub_category: {
-    _id: string;
-    name: string;
-  }[];
   total_stock: number;
-  total_sold: number;
+  images: { image: { secure_url: string } }[];
+  video?: { secure_url: string }; // 👈 use this instead of `Video[]`
+  variantsId: {
+    _id: string;
+    name?: string;
+    variants_values: string[];
+    selling_price: number;
+    offer_price: number;
+    image?: { image: { secure_url: string } };
+  }[];
   hasVariants: boolean;
-  variantsId: Variant[];
-  currency: string;
-  isPublish: boolean;
+  sub_category?: { _id: string }[];
+  tags?: string[];
 }
 
 export interface Image {
@@ -55,22 +54,20 @@ export interface Video {
 
 export interface Variant {
   _id: string;
-  productId: string;
-  name: string;
-  image: Image;
-  barcode: string;
-  sku: string;
-  selling_price: string;
-  condition: string;
-  discount_type: string | null;
-  discount_percent: string;
-  discount_amount: string;
-  discount_start_date: string | null;
-  discount_end_date: string | null;
-  offer_price: string;
-  variants_stock: number;
-  variants_values: string[] | null;
-  total_sold: number;
-  isPublish: boolean;
-  isPreOrder: boolean;
+  name?: string;
+  variants_values: string[];
+  selling_price: number;
+  offer_price: number;
+  image?: {
+    image: {
+      secure_url: string;
+    };
+  };
+  variants_stock?: number;
+  // Optional fields if not used in ProductDetail
+  productId?: string;
+  barcode?: string;
+  sku?: string;
+  condition?: string;
+  // ...add other fields as optional if necessary
 }

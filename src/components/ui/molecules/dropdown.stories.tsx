@@ -1,7 +1,16 @@
 import type { Meta, StoryObj } from "@storybook/nextjs";
 import { useState } from "react";
-import { Button } from "../atoms/button"; // Assuming Button is available for trigger
+import { Button } from "../atoms/button";
 import { Dropdown, DropdownContent, DropdownTrigger } from "./dropdown";
+
+// Define the props type for the Dropdown component
+type DropdownProps = {
+  className?: string;
+  align?: "left" | "right" | "center";
+  isDropdownOpen?: boolean;
+  onOpenChange?: (open: boolean) => void;
+  children: React.ReactNode;
+};
 
 const meta: Meta<typeof Dropdown> = {
   title: "UI/Molecules/Dropdown",
@@ -77,12 +86,12 @@ export const AlignCenter: Story = {
   },
 };
 
-// Example of a controlled dropdown
-const ControlledDropdown = (args: any) => {
+// Example of a controlled dropdown with proper typing
+const ControlledDropdown = (args: DropdownProps) => {
   const [isOpen, setIsOpen] = useState(args.isDropdownOpen || false);
   const handleOpenChange = (newOpenState: boolean) => {
     setIsOpen(newOpenState);
-    args.onOpenChange(newOpenState); // Call the action logger
+    args.onOpenChange?.(newOpenState); // Optional chaining in case onOpenChange is undefined
   };
 
   return (

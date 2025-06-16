@@ -17,7 +17,7 @@ const mockProduct = {
   _id: "1",
   name: "Sample Product",
   isPublish: true,
-  total_stock: 10,
+  total_stock: 10, // This is the main stock property
   images: [
     {
       _id: "img1",
@@ -32,8 +32,9 @@ const mockProduct = {
     {
       _id: "v1",
       name: "Default",
-      selling_price: "100",
-      variants_stock: 5,
+      selling_price: 100,
+      offer_price: 90, // Added offer_price which is required
+      variants_values: ["Default"], // Added variants_values which is required
       productId: "1",
       image: {
         _id: "img1",
@@ -47,12 +48,10 @@ const mockProduct = {
       sku: "",
       condition: "new",
       discount_type: "fixed",
-      discount_percent: "0",
-      discount_amount: "0",
+      discount_percent: 0,
+      discount_amount: 0,
       discount_start_date: null,
       discount_end_date: null,
-      offer_price: "0",
-      variants_values: [],
       total_sold: 0,
       isPublish: true,
       isPreOrder: false,
@@ -61,7 +60,7 @@ const mockProduct = {
   short_description: "A short description of the product.",
   long_description: "A longer description of the product.",
   tags: ["sample", "product"],
-  video: [],
+  video: { secure_url: "" },
   category: { _id: "cat1", name: "Sample Category" },
   brand: { _id: "brand1", name: "Sample Brand" },
   status: "active",
@@ -88,25 +87,8 @@ export const OutOfStock: Story = {
       total_stock: 0,
       variantsId: [
         {
-          _id: "v1",
-          name: "Default",
-          selling_price: "100",
-          variants_stock: 0,
-          productId: mockProduct._id,
-          image: mockProduct.images[0],
-          barcode: "",
-          sku: "",
-          condition: "new",
-          discount_type: "fixed",
-          discount_percent: "0",
-          discount_amount: "0",
-          discount_start_date: null,
-          discount_end_date: null,
-          offer_price: "0",
-          variants_values: [],
-          total_sold: 0,
-          isPublish: true,
-          isPreOrder: false,
+          ...mockProduct.variantsId[0],
+          offer_price: 0, // Adjust offer_price for out of stock scenario
         },
       ],
     },

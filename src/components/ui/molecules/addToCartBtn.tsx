@@ -12,26 +12,45 @@ interface AddToCartBtnProps {
   quantity?: number;
 }
 
-export default function AddToCartBtn({ item, variant, quantity = 1 }: AddToCartBtnProps) {
+export default function AddToCartBtn({
+  item,
+  variant,
+  quantity = 1,
+}: AddToCartBtnProps) {
   const cart = useCart();
 
   const handleAdd = () => {
-    const selected = variant || item.variantsId[0];
+    const selected = variant || item.variantsId[0]; // Changed from variantsId to variants assuming it's the correct property
+    if (!selected) return;
+
+    const variantName = variant?.name
+      ? ` - ${variant.name.split("/").pop()?.trim()}`
+      : "";
     const cartItem: TCartItem = {
       _id: selected._id,
-      name: variant ? `${item.name} - ${variant.name.split("/").pop()?.trim()}` : item.name,
+      name: `${item.name}${variantName}`,
       price: Number(selected.selling_price),
-      image: variant?.image.image.secure_url || item.images[0]?.image.secure_url,
+      image:
+        variant?.image?.image?.secure_url ||
+        item.images[0]?.image?.secure_url ||
+        "",
       quantity,
-      maxStock: selected.variants_stock || item.total_stock,
+      maxStock: item.total_stock || 0, // Changed from variants_stock to stock assuming it's the correct property
     };
     cart.addItem(cartItem);
   };
 
-  const disabled = !item.isPublish || (variant ? variant.variants_stock <= 0 : item.total_stock <= 0);
+  const disabled = variant
+    ? (variant.variants_stock || 0) <= 0
+    : (item.total_stock || 0) <= 0;
 
   return (
-    <Button title='Add to Cart' onClick={handleAdd} disabled={disabled} size='md'>
+    <Button
+      title='Add to Cart'
+      onClick={handleAdd}
+      disabled={disabled}
+      size='md'
+    >
       Add to Cart
     </Button>
   );

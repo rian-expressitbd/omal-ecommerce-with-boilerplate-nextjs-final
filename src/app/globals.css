@@ -131,7 +131,9 @@
   display: inline-block;
   white-space: nowrap;
 }
-
+body{
+  overflow-x: hidden;
+}
 .animate-marquee:hover {
   animation-play-state: paused;
 }
