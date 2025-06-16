@@ -1,66 +1,47 @@
 "use client";
-import React, { useEffect, useState } from "react";
-import { FaMagnifyingGlass } from "react-icons/fa6";
-import Image from "next/image";
-import { BsCartDash } from "react-icons/bs";
-import CommonLayout from "@/app/layouts/CommonLayout";
-import { useSelector } from "react-redux";
-import { RootState } from "@/lib/store";
+import { notificationsData } from "@/config/notification.config";
+import { useSidebar } from "@/hooks/useSidebar";
+import { navbarRef } from "@/lib/refs";
+import Link from "next/link";
+import { SidebarToggler } from "../ui/molecules/sidebarToggler";
+import Logo from "../ui/atoms/logo";
+import { CartSheet } from "../ui/organisms/cart-sheet";
+import NotificationsDropdown from "../ui/molecules/notification-btn";
+import ThemeToggler from "../ui/molecules/themeToggler";
 
-interface NavbarMiddleProps {
-  isCartOpen: boolean;
-  setIsCartOpen: (isOpen: boolean) => void;
+export interface NavbarProps {
+  className?: string;
 }
 
-export default function NavbarMiddle({ setIsCartOpen }: NavbarMiddleProps) {
-  const [businessLogo, setBusinessLogo] = useState("");
-  const { items: cartItems } = useSelector((state: RootState) => state.cart);
-
-  useEffect(() => {
-    fetch(
-      `https://backend.calquick.app/v2/api/public/6829ddabc20c6404b3e2a66b/6829ded2c20c6404b3e2a680/`
-    )
-      .then((res) => res.json())
-      .then((data) => setBusinessLogo(data?.data[0]?.logo?.secure_url || ""));
-  }, []);
-
+export const NavbarMiddle = ({ className }: NavbarProps) => {
+  const { isDesktop } = useSidebar();
   return (
-    <CommonLayout>
-      <div className='grid grid-cols-3 mt-5'>
-        <div className='w-1/3 place-self-center'></div>
-
-        <div className='w-1/3 place-self-center'>
-          <Image
-            src={businessLogo || "/assets/logo1.jpg"}
-            alt='business_logo'
-            width={100}
-            height={50}
-          />
-        </div>
-
-        <div className='flex items-center gap-0 xl:gap-3 w-1/3 place-self-center mr-20'>
-          <div className='relative hidden xl:block'>
-            <input
-              className='h-10 bg-gray-200 p-4 rounded-4xl'
-              placeholder='Search'
-              type='text'
-            />
-            <FaMagnifyingGlass
-              size={20}
-              className='absolute top-[10px] right-4'
-            />
-          </div>
-
-          <div className='relative'>
-            <div onClick={() => setIsCartOpen(true)} className='cursor-pointer'>
-              <BsCartDash size={44} className='h-10 w-20' />
-            </div>
-            <sup className='text-white bg-red-700 p-3 rounded-full absolute top-0 right-0'>
-              {cartItems?.length > 9 ? "9+" : cartItems?.length}
-            </sup>
-          </div>
-        </div>
+    <header
+      ref={navbarRef}
+      className={`${className} p-3 sm:p-4 md:p-5 flex bg-white dark:bg-gray-700 z-50 justify-between items-center transition-all duration-200`}
+    >
+      <div className='flex gap-2 sm:gap-3 items-center dark:text-white'>
+        {!isDesktop && <SidebarToggler />}
+        <Link href={"/"}>
+          <Logo />
+        </Link>
       </div>
-    </CommonLayout>
+
+      <div className='flex items-center gap-1 sm:gap-2 md:gap-3 lg:gap-4'>
+        {/* <Button
+          title='Cart Button'
+          className='p-2 rounded-full bg-gray-200 hover:bg-gray-100 dark:bg-gray-900 dark:hover:bg-gray-500 cursor-pointer transition-colors text-primary dark:text-white'
+          onClick={() => {
+            console.log("Cart Clicked");
+          }}
+        >
+          <Icon icon={TbShoppingCart} size={18} className='sm:size-5' />
+        </Button> */}
+        <CartSheet />
+
+        <NotificationsDropdown notifications={notificationsData} />
+        <ThemeToggler />
+      </div>
+    </header>
   );
-}
+};

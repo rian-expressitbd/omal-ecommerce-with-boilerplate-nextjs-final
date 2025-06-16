@@ -35,7 +35,7 @@ export default function Banner() {
           </CommonLayout>
 
           <Image
-            src='/assets/banner1.jpg'
+            src='/assets/banner.png'
             alt='slider_img_one'
             width={1080}
             height={720}
@@ -65,7 +65,7 @@ export default function Banner() {
           </CommonLayout>
 
           <Image
-            src='/assets/banner2.jpg'
+            src='/assets/banner2.png'
             alt='slider_img_two'
             width={1080}
             height={720}

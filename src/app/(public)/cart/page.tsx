@@ -11,7 +11,7 @@ import { FiArrowLeft } from "react-icons/fi";
 
 export default function CartPage() {
   const { businessData } = useBusiness();
-  const { items, itemCount, subtotal, discount, grandTotal, removeItem, updateItemQuantity } = useCart();
+  const { items, itemCount, subtotal, discount, removeItem, updateItemQuantity } = useCart();
   const currency = businessData?.currency?.[0] || "USD";
 
   return (
@@ -92,7 +92,7 @@ export default function CartPage() {
 
               <div className='flex justify-between text-lg font-bold border-t pt-4 mb-6'>
                 <span>Total</span>
-                <span>{formatCurrency(grandTotal, currency)}</span>
+                <span>{formatCurrency(subtotal, currency)}</span>
               </div>
 
               <Button title='' className='w-full' size='lg'>

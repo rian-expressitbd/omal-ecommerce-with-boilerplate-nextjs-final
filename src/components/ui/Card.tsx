@@ -9,13 +9,11 @@ interface CardProps {
 
 export default function Card({ product }: CardProps) {
   return (
-    <div>
+    <div className="h-full">
       <div className='group rounded-[10px] h-full flex flex-col relative overflow-hidden transition-all duration-300 dark:bg-white dark:text-black'>
         {/* Optional: Category (if needed) */}
         <div className='flex justify-between z-10 bg-white'>
-          <p className='text-xs text-gray-400'>
-            {product.sub_category?.[0]?._id ?? "Uncategorized"}
-          </p>
+         
         </div>
 
         <div className='flex flex-col flex-grow transition-transform duration-300 '>
