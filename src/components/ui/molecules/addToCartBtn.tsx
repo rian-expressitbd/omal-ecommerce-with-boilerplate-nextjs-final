@@ -10,6 +10,7 @@ interface AddToCartBtnProps {
   item: Product;
   variant?: Variant;
   quantity?: number;
+  disabled?: boolean;
 }
 
 export default function AddToCartBtn({

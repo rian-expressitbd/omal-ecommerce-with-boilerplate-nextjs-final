@@ -9,9 +9,9 @@ import { Order } from "@/types/cart";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { AppDispatch, RootState } from "@/lib/store";
-import Navbar from "@/components/Navbar/Navbar";
 import Footer from "@/components/Footer/Footer";
-import { clearCart, toggleCart } from "@/lib/features/cart/cartSlice";
+import { clearCart } from "@/lib/features/cart/cartSlice";
+import { NavbarMiddle } from "@/components/Navbar/NavbarMiddle";
 
 interface CartItem {
   productId: string;
@@ -25,7 +25,7 @@ interface CartItem {
 export default function Checkout(): JSX.Element {
   const dispatch = useDispatch<AppDispatch>();
   const router = useRouter();
-  const { isCartOpen, items } = useSelector(
+  const {  items } = useSelector(
     (state: RootState) => state.cart
   ) as {
     isCartOpen: boolean;
@@ -138,9 +138,8 @@ export default function Checkout(): JSX.Element {
 
   return (
     <>
-      <Navbar
-        isCartOpen={isCartOpen}
-        setIsCartOpen={() => dispatch(toggleCart())}
+      <NavbarMiddle
+        
       />
       <CommonLayout>
         <Toaster position='top-center' />

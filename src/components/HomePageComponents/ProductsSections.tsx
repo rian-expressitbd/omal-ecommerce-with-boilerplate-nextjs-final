@@ -26,7 +26,7 @@ export default function ProductsSection() {
               key={product._id}
               className='group block border rounded-lg overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300'
             >
-              <div className='relative w-full h-48 bg-gray-100'>
+              <div className='relative w-full h-[400px] bg-gray-100'>
                 <Image
                   src={
                     product.images?.[0]?.image.secure_url ||
@@ -34,7 +34,7 @@ export default function ProductsSection() {
                   }
                   alt={product.name}
                   fill
-                  className='object-cover'
+                  className='object-cover h-[348px]'
                   priority
                   sizes='(max-width: 640px) 100vw, (max-width: 768px) 50vw, 33vw'
                 />

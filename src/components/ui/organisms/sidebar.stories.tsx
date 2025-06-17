@@ -1,28 +1,22 @@
+// In your Storybook file (e.g., sidebar.stories.tsx)
 import type { Meta, StoryObj } from "@storybook/nextjs";
 import { Sidebar } from "./sidebar";
 
 // Define the props type for your Sidebar component
-type SidebarProps = {
+interface SidebarProps {
   isDesktop?: boolean;
   isSidebarOpen?: boolean;
-  // Add any other props your Sidebar component accepts
-};
+}
 
-const meta: Meta<typeof Sidebar> = {
+// Specify SidebarProps in Meta
+const meta: Meta<SidebarProps> = {
   title: "UI/Organisms/Sidebar",
   component: Sidebar,
   parameters: {
-    layout: "fullscreen", // Sidebar typically takes full height
+    layout: "fullscreen",
   },
   tags: ["autodocs"],
-  render: (args: SidebarProps) => {
-    return (
-      <Sidebar
-        {...args}
-        // Pass any additional props your component needs
-      />
-    );
-  },
+  render: (args) => <Sidebar {...args} />, // Simplified render function
 };
 
 export default meta;
@@ -31,18 +25,18 @@ type Story = StoryObj<typeof meta>;
 export const Default: Story = {
   args: {
     isDesktop: true,
-    isSidebarOpen: true, // Assume open for demonstration
+    isSidebarOpen: true,
   },
 };
 
 export const MobileView: Story = {
   args: {
     isDesktop: false,
-    isSidebarOpen: true, // Assume open for demonstration
+    isSidebarOpen: true,
   },
   parameters: {
     viewport: {
-      defaultViewport: "mobile1", // Simulate mobile viewport
+      defaultViewport: "mobile1",
     },
   },
 };
