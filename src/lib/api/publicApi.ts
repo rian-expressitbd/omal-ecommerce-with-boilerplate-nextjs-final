@@ -41,7 +41,21 @@ export const publicApi = createApi({
 
     getProducts: builder.query<
       Product[],
-      Partial<{ search?: string; page?: number; limit?: number; _id?: string }>
+      Partial<{
+        search?: string;
+        page?: number;
+        limit?: number;
+        _id?: string;
+        sort?: string;
+        fields?: string;
+        hasVariants?: boolean;
+        created_by?: string;
+        category?: string;
+        business?: string;
+        variantsId?: string;
+        brand?: string;
+        total_sold?: number;
+      }>
     >({
       query: (params = {}) => ({
         url: `/public/${OWNER_ID}/${BUSINESS_ID}/products`,
