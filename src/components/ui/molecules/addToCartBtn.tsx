@@ -2,31 +2,35 @@
 "use client";
 
 import { useCart } from "@/hooks/useCart";
-import { TCartItem } from "@/lib/features/cart/cartSlice";
+import { TCartItem, toggleCart } from "@/lib/features/cart/cartSlice";
 import type { Product, Variant } from "@/types/product";
 import { Button } from "../atoms/button";
+import { useDispatch } from "react-redux";
 
 interface AddToCartBtnProps {
   item: Product;
   variant?: Variant;
   quantity?: number;
   disabled?: boolean;
+  className?: string; // Renamed from `class` to `className`
 }
 
 export default function AddToCartBtn({
   item,
   variant,
   quantity = 1,
+  className,
 }: AddToCartBtnProps) {
   const cart = useCart();
-
+  const dispatch = useDispatch();
   const handleAdd = () => {
-    const selected = variant || item.variantsId[0]; // Changed from variantsId to variants assuming it's the correct property
+    const selected = variant || item.variantsId[0];
     if (!selected) return;
 
     const variantName = variant?.name
       ? ` - ${variant.name.split("/").pop()?.trim()}`
       : "";
+
     const cartItem: TCartItem = {
       _id: selected._id,
       name: `${item.name}${variantName}`,
@@ -36,12 +40,14 @@ export default function AddToCartBtn({
         item.images[0]?.image?.secure_url ||
         "",
       quantity,
-      maxStock: item.total_stock || 0, // Changed from variants_stock to stock assuming it's the correct property
+      maxStock: item.total_stock || 0,
     };
+
     cart.addItem(cartItem);
+    dispatch(toggleCart());
   };
 
-  const disabled = variant
+  const isDisabled = variant
     ? (variant.variants_stock || 0) <= 0
     : (item.total_stock || 0) <= 0;
 
@@ -49,8 +55,9 @@ export default function AddToCartBtn({
     <Button
       title='Add to Cart'
       onClick={handleAdd}
-      disabled={disabled}
+      disabled={isDisabled || className == "disabled"}
       size='md'
+      className={`w-full ${className ?? ""}`} // Apply className here safely
     >
       Add to Cart
     </Button>

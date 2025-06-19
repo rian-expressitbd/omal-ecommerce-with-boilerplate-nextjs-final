@@ -11,14 +11,24 @@ import { FiArrowLeft } from "react-icons/fi";
 
 export default function CartPage() {
   const { businessData } = useBusiness();
-  const { items, itemCount, subtotal, discount, removeItem, updateItemQuantity } = useCart();
+  const {
+    items,
+    itemCount,
+    subtotal,
+    discount,
+    removeItem,
+    updateItemQuantity,
+  } = useCart();
   const currency = businessData?.currency?.[0] || "USD";
 
   return (
     <div className='container mx-auto px-4 py-8'>
       <EmptyCartRedirect />
       <div className='mb-6'>
-        <Link href='/products' className='flex items-center text-primary hover:underline'>
+        <Link
+          href='/products'
+          className='flex items-center text-primary hover:underline'
+        >
           <FiArrowLeft className='mr-2' /> Continue Shopping
         </Link>
       </div>
@@ -58,7 +68,9 @@ export default function CartPage() {
                   key={item._id}
                   item={item}
                   onRemove={() => removeItem(item._id)}
-                  onQuantityChange={(quantity) => updateItemQuantity(item._id, quantity)}
+                  onQuantityChange={(quantity) =>
+                    updateItemQuantity(item._id, Number(quantity))
+                  }
                   showQuantityControls
                 />
               ))}

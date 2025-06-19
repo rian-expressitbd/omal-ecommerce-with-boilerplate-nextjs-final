@@ -1,26 +1,21 @@
 "use client";
-import { notificationsData } from "@/config/notification.config";
-import { useSidebar } from "@/hooks/useSidebar";
+
 import { navbarRef } from "@/lib/refs";
 import Link from "next/link";
 import Logo from "../atoms/logo";
-import NotificationsDropdown from "../molecules/notification-btn";
-import { SidebarToggler } from "../molecules/sidebarToggler";
-import ThemeToggler from "../molecules/themeToggler";
+
 import { CartSheet } from "../organisms/cart-sheet";
 export interface NavbarProps {
   className?: string;
 }
 
 export const Navbar = ({ className }: NavbarProps) => {
-  const { isDesktop } = useSidebar();
   return (
     <header
       ref={navbarRef}
       className={`${className} p-3 sm:p-4 md:p-5 flex bg-white dark:bg-gray-700 z-50 justify-between items-center transition-all duration-200`}
     >
       <div className='flex gap-2 sm:gap-3 items-center dark:text-white'>
-        {!isDesktop && <SidebarToggler />}
         <Link href={"/"}>
           <Logo />
         </Link>
@@ -37,9 +32,6 @@ export const Navbar = ({ className }: NavbarProps) => {
           <Icon icon={TbShoppingCart} size={18} className='sm:size-5' />
         </Button> */}
         <CartSheet />
-
-        <NotificationsDropdown notifications={notificationsData} />
-        <ThemeToggler />
       </div>
     </header>
   );

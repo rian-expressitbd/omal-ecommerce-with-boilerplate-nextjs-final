@@ -158,7 +158,7 @@ const Sheet: React.FC<SheetProps> = ({
             aria-modal='true'
             aria-labelledby={title ? "sheet-title" : undefined}
             className={twMerge(
-              "fixed z-[10000] bg-white dark:bg-gray-800 w-[400px]",
+              "fixed z-[10000] bg-white dark:bg-gray-800 w-full md:w-[400px]",
               position === "left" || position === "right" ? "h-svh" : "w-full",
               positionClasses[position],
               className

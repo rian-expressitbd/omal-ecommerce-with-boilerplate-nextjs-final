@@ -16,7 +16,7 @@ export const metadata: Metadata = {
 
 export default function ProductLayout({ children }: { children: React.ReactNode }) {
   return (
-    <section className='container mx-auto px-4 py-8'>
+    <section className=''>
       <div className='max-w-6xl mx-auto'>{children}</div>
     </section>
   );

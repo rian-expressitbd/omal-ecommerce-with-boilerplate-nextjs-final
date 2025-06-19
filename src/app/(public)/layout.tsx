@@ -1,7 +1,9 @@
 "use client";
 
-import { Navbar } from "@/components/ui/organisms/navbar";
-import { Sidebar } from "@/components/ui/organisms/sidebar";
+import Footer from "@/components/Footer/Footer";
+import NavbarLower from "@/components/Navbar/NavbarLower";
+import { NavbarMiddle } from "@/components/Navbar/NavbarMiddle";
+import NavbarUpper from "@/components/Navbar/NavbarUpper";
 import { useSidebar } from "@/hooks/useSidebar";
 import { navbarRef, sidebarRef } from "@/lib/refs";
 import { easeInOut, motion } from "motion/react";
@@ -14,7 +16,11 @@ const transitionConfig = {
   duration: 0.3,
 };
 
-export default function PublicLayout({ children }: { children: React.ReactNode }) {
+export default function PublicLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   const { isSidebarOpen, isDesktop } = useSidebar();
   const navbarHeight = navbarRef.current?.offsetHeight || 0;
   const sidebarWidth = sidebarRef.current?.offsetWidth || 0;
@@ -111,9 +117,7 @@ export default function PublicLayout({ children }: { children: React.ReactNode }
             ...layoutStyles.sidebar,
             willChange: "transform",
           }}
-        >
-          <Sidebar />
-        </motion.div>
+        ></motion.div>
       )}
 
       {/* Navbar */}
@@ -128,7 +132,9 @@ export default function PublicLayout({ children }: { children: React.ReactNode }
           willChange: "transform",
         }}
       >
-        <Navbar />
+        <NavbarUpper />
+        <NavbarMiddle />
+        <NavbarLower />
       </motion.div>
 
       {/* <div className='relative flex flex-col w-svw'> */}
@@ -145,6 +151,7 @@ export default function PublicLayout({ children }: { children: React.ReactNode }
         transition={transitionConfig}
       >
         <div className='w-full'>{children}</div>
+        <Footer />
       </motion.div>
       {/* </div> */}
     </div>

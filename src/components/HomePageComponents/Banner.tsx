@@ -13,63 +13,67 @@ export default function Banner() {
     slidesToScroll: 1,
   };
   return (
-    <div className='mt-5'>
+    <div className='mb-2 mt-[-14px]'>
       <Slider {...settings}>
-        <div className='w-full relative'>
+        <div className='relative w-full h-[300px] sm:h-[400px] md:h-[500px] lg:h-[600px] xl:h-[700px]'>
           <div className='absolute inset-0 bg-black/50  z-10'></div>
           <CommonLayout>
-            <div className='absolute top-1/2 transform -translate-y-1/2 lg:w-1/3 w-[275px] p-3 md:p-0 z-20'>
-              <h1 className='text-white text-7xl font-semibold'>
+            <div className='absolute top-1/2 transform -translate-y-1/2 lg:w-1/3 w-[275px] p-3 md:p-0 z-20 '>
+              <h1 className='text-white text-4xl md:text-7xl font-semibold '>
                 Save Up To 40%
               </h1>
-              <p className='text-sm text-white mt-3 text-left md:text-justify'>
-                Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                Sapiente dolorem quidem illo, fugiat quis quisquam suscipit
-                laboriosam blanditiis praesentium reiciendis velit dignissimos
-                voluptatum illum, itaque cumque dicta tempora! Fugit, unde
+              <p className='text-sm text-white mt-3 text-justify w-[250px] md:w-full'>
+                Lorem ipsum dolor sit amet consectetur, adipisicing elit. Iusto
+                non eaque ad inventore? Quam labore at cum, fugit ea culpa saepe
+                iure incidunt aliquam inventore aut fugiat, possimus voluptate
+                aspernatur. Fugit consequuntur reiciendis voluptatum earum.
               </p>
               <div className='mt-8'>
-                <Button className='bg-purple-700 text-white'>Shop Now</Button>
+                <Button className='bg-purple-700 text-white hover:text-purple-700 hover:bg-white duration-500'>
+                  Shop Now
+                </Button>
               </div>
             </div>
           </CommonLayout>
 
           <Image
             src='/assets/banner.png'
-            alt='slider_img_one'
-            width={1080}
-            height={720}
-            className='h-[800px] w-full object-cover'
+            alt='Summer Sale'
+            fill
+            priority
+            className='object-cover'
+            sizes='(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 100vw'
           />
         </div>
 
-        <div className='w-full relative'>
-          {/* Dark overlay div */}
+        <div className='relative w-full h-[300px] sm:h-[400px] md:h-[500px] lg:h-[600px] xl:h-[700px]'>
           <div className='absolute inset-0 bg-black/50  z-10'></div>
-
           <CommonLayout>
-            <div className='absolute top-1/2 transform -translate-y-1/2 lg:w-1/3 w-[275px] z-20'>
-              <h1 className='text-white text-7xl font-semibold'>
+            <div className='absolute top-1/2 transform -translate-y-1/2 lg:w-1/3 w-[275px] p-3 md:p-0 z-20 '>
+              <h1 className='text-white text-4xl md:text-7xl font-semibold '>
                 Save Up To 40%
               </h1>
-              <p className='text-sm text-white mt-3 text-left md:text-justify'>
-                Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                Sapiente dolorem quidem illo, fugiat quis quisquam suscipit
-                laboriosam blanditiis praesentium reiciendis velit dignissimos
-                voluptatum illum, itaque cumque dicta tempora! Fugit, unde
+              <p className='text-sm text-white mt-3 text-justify w-[250px] md:w-full'>
+                Lorem ipsum dolor sit amet consectetur, adipisicing elit. Iusto
+                non eaque ad inventore? Quam labore at cum, fugit ea culpa saepe
+                iure incidunt aliquam inventore aut fugiat, possimus voluptate
+                aspernatur. Fugit consequuntur reiciendis voluptatum earum.
               </p>
               <div className='mt-8'>
-                <Button className='bg-purple-700 text-white'>Shop Now</Button>
+                <Button className='bg-purple-700 text-white hover:text-purple-700 hover:bg-white duration-500'>
+                  Shop Now
+                </Button>
               </div>
             </div>
           </CommonLayout>
 
           <Image
             src='/assets/banner2.png'
-            alt='slider_img_two'
-            width={1080}
-            height={720}
-            className='h-[800px] w-full object-cover'
+            alt='Summer Sale'
+            fill
+            priority
+            className='object-cover'
+            sizes='(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 100vw'
           />
         </div>
       </Slider>

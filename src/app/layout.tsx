@@ -24,9 +24,11 @@ export default function RootLayout({
   return (
     <html lang='en' suppressHydrationWarning>
       <AppProviders>
-        <body className={"w-full max-w-screen h-screen"}>
+        <body className={"w-full max-w-screen"}>
           <main
-            className={"bg-linear-to-b from-blue-300  to-orange-100  dark:from-black  dark:to-gray-800 cursor-default"}
+            className={
+              "bg-linear-to-b from-blue-300  to-orange-100  dark:from-black  dark:to-gray-800 cursor-default"
+            }
           >
             <Toaster position='top-right' expand={true} richColors />
             <AnimatePresence>{children}</AnimatePresence>

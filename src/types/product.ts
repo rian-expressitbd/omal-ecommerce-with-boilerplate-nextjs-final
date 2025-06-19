@@ -33,6 +33,7 @@ export interface Product {
   hasVariants: boolean;
   sub_category?: { _id: string }[];
   tags?: string[];
+  createdAt: string;
 }
 
 export interface Image {

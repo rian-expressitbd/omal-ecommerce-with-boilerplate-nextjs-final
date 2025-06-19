@@ -19,14 +19,14 @@ export default function ProductsSection() {
     <div className='p-4'>
       <CommonLayout>
         <h1 className='text-2xl font-bold mb-6'>All Products</h1>
-        <div className='grid grid-cols-1 md:grid-cols-2 mdl:grid-cols-3 lgx:grid-cols-4 gap-6'>
+        <div className='grid grid-cols-2  mdl:grid-cols-3 lgx:grid-cols-4 gap-2'>
           {products.map((product: Product) => (
             <Link
               href={`/products/${product._id}`}
               key={product._id}
               className='group block border rounded-lg overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300'
             >
-              <div className='relative w-full h-[400px] bg-gray-100'>
+              <div className='relative w-full h-[320px] bg-gray-100'>
                 <Image
                   src={
                     product.images?.[0]?.image.secure_url ||

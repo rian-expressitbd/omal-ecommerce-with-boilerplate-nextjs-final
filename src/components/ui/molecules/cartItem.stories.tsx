@@ -9,7 +9,6 @@ type CartItemType = {
   image: string;
   quantity: number;
   maxStock: number;
-  // Add any other properties your cart item might have
 };
 
 const meta: Meta<typeof CartItem> = {
@@ -44,7 +43,8 @@ export const WithQuantityControls: Story = {
   args: {
     item: { ...mockCartItem, quantity: 5 },
     onRemove: () => alert("Remove item"),
-    onQuantityChange: (quantity: number) => alert(`Quantity changed to ${quantity}`),
+    onQuantityChange: (id: string, quantity: number) =>
+      alert(`ID: ${id} | Quantity changed to ${quantity}`),
     showQuantityControls: true,
   },
 };

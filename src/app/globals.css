@@ -131,9 +131,17 @@
   display: inline-block;
   white-space: nowrap;
 }
-body{
+body {
+  overflow-x: hidden;
+}
+html{
   overflow-x: hidden;
 }
 .animate-marquee:hover {
   animation-play-state: paused;
+}
+.disabled {
+  cursor: not-allowed;
+  background-color: rgb(158, 156, 156);
+  color: white;
 }

@@ -90,7 +90,7 @@ export async function generateMetadata(props: { params: Promise<{ id: string }> 
   // const updatedTimeUnix = product.updatedAt ? Math.floor(new Date(product.updatedAt).getTime() / 1000) : undefined;
 
   return {
-    title: `${title} | Our Store`,
+    title: `${title} | Our Store`, 
     description: cleanedDescription,
     openGraph: {
       title,
@@ -127,7 +127,7 @@ export default async function ProductPage(props: { params: Promise<{ id: string 
   // const inStock = product.total_stock > 0;
 
   return (
-    <div className='max-w-6xl mx-auto p-4'>
+    <div className='max-w-6xl mx-auto '>
       <ProductDetail  />
     </div>
     // <article className='grid grid-cols-1 md:grid-cols-2 gap-8 p-4 max-w-6xl mx-auto'>

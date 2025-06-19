@@ -1,4 +1,3 @@
-// components/cartSheet.tsx
 "use client";
 import { useBusiness } from "@/hooks/useBusiness";
 import { useCart } from "@/hooks/useCart";
@@ -9,14 +8,20 @@ import { toast } from "sonner";
 import { Button } from "../atoms/button";
 import { CartItem } from "../molecules/cartItem";
 import { Sheet, SheetContent, SheetFooter } from "../molecules/sheet";
-
-export interface CartSheetProps {
-  className?: string;
-}
+import { TCartItem } from "@/lib/features/cart/cartSlice";
 
 export function CartSheet() {
   const { businessData } = useBusiness();
-  const { items, itemCount, isOpen, subtotal, removeItem, closeCart, openCart } = useCart();
+  const {
+    items,
+    itemCount,
+    isOpen,
+    subtotal,
+    removeItem,
+    closeCart,
+    openCart,
+    updateItemQuantity,
+  } = useCart();
 
   const currency = businessData?.currency?.[0] || "USD";
 
@@ -48,12 +53,15 @@ export function CartSheet() {
         </span>
       </Button>
 
-      <Sheet isOpen={isOpen} onClose={closeCart} position='right'>
+      <Sheet
+        isOpen={isOpen}
+        onClose={closeCart}
+        position='right'
+        title={`Your Cart (${itemCount})`}
+        showHeader
+        showCloseButton
+      >
         <SheetContent className='p-0 flex flex-col'>
-          <div className='px-6 py-4 border-b'>
-            <h2 className='text-lg font-semibold '>Your Cart ({itemCount})</h2>
-          </div>
-
           <div className='flex-1 overflow-y-auto'>
             {items.length === 0 ? (
               <div className='flex flex-col items-center justify-center h-full gap-4 p-8'>
@@ -67,9 +75,13 @@ export function CartSheet() {
               </div>
             ) : (
               <div className='divide-y dark:divide-gray-700'>
-                {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-                {items.map((item: any) => (
-                  <CartItem key={item._id} item={item} onRemove={() => removeItem(item._id)} />
+                {items.map((item: TCartItem) => (
+                  <CartItem
+                    key={item._id}
+                    item={item}
+                    onRemove={() => removeItem(item._id)}
+                    onQuantityChange={(id, qty) => updateItemQuantity(id, qty)}
+                  />
                 ))}
               </div>
             )}
@@ -83,12 +95,22 @@ export function CartSheet() {
                   <span>{formatCurrency(subtotal, currency)}</span>
                 </div>
 
-                <Button title='Continue Shopping' size='md' variant='outline' className='w-full' onClick={closeCart}>
+                <Button
+                  title='Continue Shopping'
+                  size='md'
+                  variant='outline'
+                  className='w-full'
+                  onClick={closeCart}
+                >
                   Continue Shopping
                 </Button>
-                <Button title='View Cart & Checkout' className='w-full' size='lg'>
-                  <Link href='/cart' onClick={closeCart}>
-                    View Cart & Checkout
+                <Button
+                  title='View Cart & Checkout'
+                  className='w-full'
+                  size='lg'
+                >
+                  <Link href='/checkout' onClick={closeCart}>
+                    Checkout
                   </Link>
                 </Button>
               </div>

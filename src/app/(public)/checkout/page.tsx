@@ -2,7 +2,6 @@
 
 import React, { useState, useEffect, JSX } from "react";
 import { useSelector, useDispatch } from "react-redux";
-
 import CommonLayout from "@/app/layouts/CommonLayout";
 import { Toaster, toast } from "react-hot-toast";
 import { Order } from "@/types/cart";
@@ -11,7 +10,6 @@ import Image from "next/image";
 import { AppDispatch, RootState } from "@/lib/store";
 import Footer from "@/components/Footer/Footer";
 import { clearCart } from "@/lib/features/cart/cartSlice";
-import { NavbarMiddle } from "@/components/Navbar/NavbarMiddle";
 
 interface CartItem {
   productId: string;
@@ -25,9 +23,7 @@ interface CartItem {
 export default function Checkout(): JSX.Element {
   const dispatch = useDispatch<AppDispatch>();
   const router = useRouter();
-  const {  items } = useSelector(
-    (state: RootState) => state.cart
-  ) as {
+  const { items } = useSelector((state: RootState) => state.cart) as {
     isCartOpen: boolean;
     items: CartItem[];
   };
@@ -44,7 +40,7 @@ export default function Checkout(): JSX.Element {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    setIsLoading(false); // loading done immediately here because Redux state is sync
+    setIsLoading(false);
   }, []);
 
   const handleInputChange = (
@@ -82,6 +78,19 @@ export default function Checkout(): JSX.Element {
     return true;
   };
 
+  const totalDue = items.reduce(
+    (total, item) => total + (item.price || 0) * item.quantity,
+    0
+  );
+
+ const deliveryCharge =
+  paymentMethod === "cod"
+    ? formData.deliveryArea === "inside_dhaka"
+      ? 60
+      : 80
+    : 0;
+  const grandTotal = totalDue + deliveryCharge;
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!validateForm()) return;
@@ -102,7 +111,7 @@ export default function Checkout(): JSX.Element {
           price: item.price,
           name: item.name,
         })),
-        total_amount: totalDue,
+        total_amount: grandTotal,
         payment_method: paymentMethod,
         transaction_id: paymentMethod !== "cod" ? transactionId : null,
         status: "pending",
@@ -112,7 +121,6 @@ export default function Checkout(): JSX.Element {
       console.log("Order placed:", orderPayload);
 
       dispatch(clearCart());
-
       toast.success("Order placed successfully!");
       setTimeout(() => router.push("/order-confirmation"), 2000);
     } catch (error) {
@@ -122,11 +130,6 @@ export default function Checkout(): JSX.Element {
       setIsSubmitting(false);
     }
   };
-
-  const totalDue = items.reduce(
-    (total, item) => total + (item.price || 0) * item.quantity,
-    0
-  );
 
   if (isLoading) {
     return (
@@ -138,15 +141,12 @@ export default function Checkout(): JSX.Element {
 
   return (
     <>
-      <NavbarMiddle
-        
-      />
       <CommonLayout>
         <Toaster position='top-center' />
         <div className='mx-auto py-8 px-0 md:px-4'>
           <h1 className='text-3xl font-bold text-gray-800 mb-6'>Checkout</h1>
           <div className='grid grid-cols-1 lg:grid-cols-2 gap-8'>
-            {/* Customer Details Form */}
+            {/* Shipping Form */}
             <div className='bg-white shadow-lg p-6 rounded-lg'>
               <h2 className='text-xl font-semibold text-gray-800 mb-4'>
                 Shipping Information
@@ -165,7 +165,7 @@ export default function Checkout(): JSX.Element {
                     name='name'
                     value={formData.name}
                     onChange={handleInputChange}
-                    className='mt-1 p-3 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm placeholder-gray-400'
+                    className='mt-1 p-3 w-full border rounded-md'
                     placeholder='Enter your full name...'
                     required
                   />
@@ -183,8 +183,8 @@ export default function Checkout(): JSX.Element {
                     name='phone'
                     value={formData.phone}
                     onChange={handleInputChange}
-                    className='mt-1 p-3 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm placeholder-gray-400'
-                    placeholder='Enter your phone number...'
+                    className='mt-1 p-3 w-full border rounded-md'
+                    placeholder='Enter phone number...'
                     required
                   />
                 </div>
@@ -201,7 +201,7 @@ export default function Checkout(): JSX.Element {
                     name='address'
                     value={formData.address}
                     onChange={handleInputChange}
-                    className='mt-1 p-3 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm placeholder-gray-400'
+                    className='mt-1 p-3 w-full border rounded-md'
                     placeholder='Enter your address...'
                     required
                   />
@@ -218,7 +218,7 @@ export default function Checkout(): JSX.Element {
                     name='deliveryArea'
                     value={formData.deliveryArea}
                     onChange={handleInputChange}
-                    className='mt-1 p-3 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm'
+                    className='mt-1 p-3 w-full border rounded-md'
                     required
                   >
                     <option value='' disabled>
@@ -231,7 +231,7 @@ export default function Checkout(): JSX.Element {
               </form>
             </div>
 
-            {/* Order Summary and Payment Options */}
+            {/* Order Summary & Payment */}
             <div className='bg-white shadow-lg p-6 rounded-lg'>
               <h2 className='text-xl font-semibold text-gray-800 mb-4'>
                 Order Summary
@@ -239,49 +239,34 @@ export default function Checkout(): JSX.Element {
               {items.length === 0 ? (
                 <p className='text-red-500 text-sm'>Your cart is empty</p>
               ) : (
-                <div className='space-y-4 w-full'>
+                <div className='space-y-4'>
                   {items.map((item, index) => (
                     <div
-                      key={`${item.productId}-${item.variantId || index}`}
+                      key={`${item.productId}-${index}`}
                       className='flex justify-between border-b pb-4'
                     >
                       <div className='flex items-start gap-4 w-full'>
-                        <div className='relative w-20 h-20 bg-gray-100 rounded-md overflow-hidden'>
+                        <div className='w-20 h-20 bg-gray-100 rounded-md overflow-hidden relative'>
                           {item.image ? (
                             <Image
                               src={item.image}
-                              alt={item.name || "Product image"}
+                              alt={item.name}
                               fill
                               className='object-cover'
                             />
                           ) : (
                             <div className='w-full h-full flex items-center justify-center text-gray-400'>
-                              <svg
-                                xmlns='http://www.w3.org/2000/svg'
-                                className='h-8 w-8'
-                                fill='none'
-                                viewBox='0 0 24 24'
-                                stroke='currentColor'
-                              >
-                                <path
-                                  strokeLinecap='round'
-                                  strokeLinejoin='round'
-                                  strokeWidth={2}
-                                  d='M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z'
-                                />
-                              </svg>
+                              <span>No Image</span>
                             </div>
                           )}
                         </div>
                         <div className='flex-1'>
-                          <h3 className='font-medium text-gray-800'>
-                            {item.name || `Product #${item.productId}`}
-                          </h3>
-                          <p className='text-sm text-gray-500 mt-1'>
-                            Quantity: {item.quantity}
+                          <h3 className='font-medium'>{item.name}</h3>
+                          <p className='text-sm text-gray-500'>
+                            Qty: {item.quantity}
                           </p>
                           <p className='text-sm text-gray-500'>
-                            Price: BDT {item.price?.toLocaleString() || "0"}
+                            Price: BDT {item.price}
                           </p>
                         </div>
                         <div className='text-gray-800 font-medium'>
@@ -290,12 +275,6 @@ export default function Checkout(): JSX.Element {
                       </div>
                     </div>
                   ))}
-                  <div className='pt-4'>
-                    <div className='flex justify-between font-semibold text-gray-800 text-lg'>
-                      <p>Total Due</p>
-                      <p>BDT {totalDue.toLocaleString()}</p>
-                    </div>
-                  </div>
                 </div>
               )}
 
@@ -303,57 +282,27 @@ export default function Checkout(): JSX.Element {
                 Payment Method
               </h2>
               <div className='space-y-3'>
-                <div className='flex items-center'>
-                  <input
-                    type='radio'
-                    id='cod'
-                    name='paymentMethod'
-                    value='cod'
-                    checked={paymentMethod === "cod"}
-                    onChange={() => setPaymentMethod("cod")}
-                    className='h-4 w-4 text-blue-500 focus:ring-blue-500 border-gray-300'
-                  />
-                  <label
-                    htmlFor='cod'
-                    className='ml-2 block text-sm text-gray-700'
-                  >
-                    Cash on Delivery
-                  </label>
-                </div>
-                <div className='flex items-center'>
-                  <input
-                    type='radio'
-                    id='bkash'
-                    name='paymentMethod'
-                    value='bkash'
-                    checked={paymentMethod === "bkash"}
-                    onChange={() => setPaymentMethod("bkash")}
-                    className='h-4 w-4 text-blue-500 focus:ring-blue-500 border-gray-300'
-                  />
-                  <label
-                    htmlFor='bkash'
-                    className='ml-2 block text-sm text-gray-700'
-                  >
-                    bKash
-                  </label>
-                </div>
-                <div className='flex items-center'>
-                  <input
-                    type='radio'
-                    id='nagad'
-                    name='paymentMethod'
-                    value='nagad'
-                    checked={paymentMethod === "nagad"}
-                    onChange={() => setPaymentMethod("nagad")}
-                    className='h-4 w-4 text-blue-500 focus:ring-blue-500 border-gray-300'
-                  />
-                  <label
-                    htmlFor='nagad'
-                    className='ml-2 block text-sm text-gray-700'
-                  >
-                    Nagad
-                  </label>
-                </div>
+                {["cod", "bkash", "nagad"].map((method) => (
+                  <div className='flex items-center' key={method}>
+                    <input
+                      type='radio'
+                      id={method}
+                      name='paymentMethod'
+                      value={method}
+                      checked={paymentMethod === method}
+                      onChange={() => setPaymentMethod(method)}
+                      className='h-4 w-4 text-blue-500 border-gray-300'
+                    />
+                    <label
+                      htmlFor={method}
+                      className='ml-2 block text-sm text-gray-700'
+                    >
+                      {method === "cod"
+                        ? "Cash on Delivery"
+                        : method.toUpperCase()}
+                    </label>
+                  </div>
+                ))}
                 {(paymentMethod === "bkash" || paymentMethod === "nagad") && (
                   <div className='mt-4'>
                     <label
@@ -367,20 +316,34 @@ export default function Checkout(): JSX.Element {
                       id='transactionId'
                       value={transactionId}
                       onChange={(e) => setTransactionId(e.target.value)}
-                      className='mt-1 p-2 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm placeholder-gray-400'
+                      className='mt-1 p-2 w-full border rounded-md'
                       placeholder='Enter transaction ID'
-                      required={
-                        paymentMethod === "bkash" || paymentMethod === "nagad"
-                      }
+                      required
                     />
                   </div>
                 )}
               </div>
 
+              {/* Price Summary */}
+              <div className='pt-4 space-y-2'>
+                <div className='flex justify-between font-medium text-gray-700'>
+                  <p>Subtotal</p>
+                  <p>BDT {totalDue.toLocaleString()}</p>
+                </div>
+                <div className='flex justify-between font-medium text-gray-700'>
+                  <p>Delivery Charge</p>
+                  <p>BDT {deliveryCharge.toLocaleString()}</p>
+                </div>
+                <div className='flex justify-between font-semibold text-gray-800 text-lg'>
+                  <p>Total</p>
+                  <p>BDT {grandTotal.toLocaleString()}</p>
+                </div>
+              </div>
+
               <button
                 onClick={handleSubmit}
                 disabled={isSubmitting || items.length === 0}
-                className={`mt-6 w-full bg-blue-600 text-white py-3 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors ${
+                className={`mt-6 w-full bg-blue-600 text-white py-3 rounded-md hover:bg-blue-700 transition ${
                   isSubmitting || items.length === 0
                     ? "opacity-50 cursor-not-allowed"
                     : ""

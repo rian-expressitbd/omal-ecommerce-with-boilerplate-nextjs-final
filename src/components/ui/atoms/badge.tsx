@@ -14,6 +14,7 @@ interface BadgeProps {
     | 'yellow'
     | 'gray'
   className?: string
+  onClick?: () => void,
 }
 
 export const Badge = ({

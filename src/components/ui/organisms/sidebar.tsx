@@ -38,7 +38,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
   const SidebarContent = () => (
     <div className="flex flex-col h-full">
       {/* Scrollable Menu */}
-      <div className="flex-1 overflow-y-scroll scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-100 dark:scrollbar-track-gray-700 px-3 py-4 space-y-1">
+      <div className="flex-1 scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-100 dark:scrollbar-track-gray-700 px-3 py-4 space-y-1">
         {menuItems.map((item) => (
           <div key={item.title}>
             {item.submenu ? (
