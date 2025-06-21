@@ -11,12 +11,13 @@ import { HYDRATE } from "next-redux-wrapper";
 const OWNER_ID = process.env.NEXT_PUBLIC_OWNER_ID;
 const BUSINESS_ID = process.env.NEXT_PUBLIC_BUSINESS_ID;
 const PUBLIC_API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
-console.log("OWNER_ID", OWNER_ID); //prints owner id
-console.log("BUSINESS_ID", BUSINESS_ID); //prints business id
+console.log("OWNER_ID", OWNER_ID); // prints owner id
+console.log("BUSINESS_ID", BUSINESS_ID); // prints business id
 
 if (!OWNER_ID || !BUSINESS_ID || !PUBLIC_API_BASE_URL) {
   throw new Error("Missing ENV variables: Please check .env.local");
 }
+
 // Type Guard for HYDRATE
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function isHydrateAction(action: Action): action is PayloadAction<any> {
@@ -107,9 +108,30 @@ export const publicApi = createApi({
             }))
           : [],
     }),
-    getProductsByCategories: builder.query({
-      query: (categoryId: string) =>
-        `/public/${OWNER_ID}/${BUSINESS_ID}/products?category_group=${categoryId}`,
+
+    getProductsByCategories: builder.query<
+      Product[],
+      { categoryId: string; page?: number; limit?: number }
+    >({
+      query: ({ categoryId, page, limit }) => ({
+        url: `/public/${OWNER_ID}/${BUSINESS_ID}/products`,
+        params: {
+          category_group: categoryId,
+          ...(page && { page }),
+          ...(limit && { limit }),
+        },
+      }),
+      transformResponse: (res: ApiResponse<Product[]>) => res.data,
+      providesTags: (result) =>
+        result
+          ? [
+              ...result.map(({ _id }) => ({
+                type: "Product" as const,
+                id: _id,
+              })),
+              { type: "Products", id: "LIST" },
+            ]
+          : [{ type: "Products", id: "LIST" }],
     }),
   }),
 });

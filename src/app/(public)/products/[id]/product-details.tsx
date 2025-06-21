@@ -1,4 +1,5 @@
 "use client";
+
 import { v4 as uuidv4 } from "uuid";
 import CommonLayout from "@/app/layouts/CommonLayout";
 import Image from "next/image";
@@ -8,8 +9,7 @@ import { motion } from "framer-motion";
 import { FaMinus, FaPlus } from "react-icons/fa6";
 import { Toaster } from "react-hot-toast";
 
-import { Product } from "@/types/cart";
-import { Variant } from "@/types/product";
+import { Product, Variant } from "@/types/product"; // Use Product and Variant from @/types/product
 import Breadcrumb from "@/components/ui/Breadcrumb";
 import { VideoPlayer } from "@/components/media/VideoPlayer";
 import Title from "@/components/ui/Title";
@@ -44,7 +44,7 @@ export default function ProductPage() {
     error,
   } = useGetProductByIdQuery(productId);
 
-  const product = rtkProduct?.data[0];
+  const product = rtkProduct?.[0]; // Changed from rtkProduct.data[0]
   const hasVariants = product?.hasVariants || false;
   const variants: Variant[] = product?.variantsId || [];
 
@@ -63,10 +63,8 @@ export default function ProductPage() {
   }, [product, hasVariants, variants]);
 
   const { data: relatedProducts } = useGetProductsByCategoriesQuery(
-    product?.sub_category?.[0]?._id || "",
-    {
-      skip: !product?.sub_category?.[0]?._id,
-    }
+    { categoryId: product?.sub_category?.[0]?._id || "", page: 1, limit: 10 }, // Added pagination params
+    { skip: !product?.sub_category?.[0]?._id }
   );
 
   const handleSelectVariant = (variantId: string) => {
@@ -79,9 +77,9 @@ export default function ProductPage() {
   };
 
   const mediaItems: MediaItem[] = [
-    ...(product?.images?.map((img: { image: { optimizeUrl: string } }) => ({
+    ...(product?.images?.map((img: { image: { secure_url: string } }) => ({
       type: "image" as const,
-      url: img?.image?.optimizeUrl || "",
+      url: img?.image?.secure_url || "",
     })) || []),
     ...(product?.video?.secure_url
       ? [{ type: "video" as const, url: product.video.secure_url }]
@@ -139,8 +137,6 @@ export default function ProductPage() {
       </div>
 
       <div className='flex flex-col lg:flex-row gap-12 items-start mt-5 mb-5 w-full'>
-        {" "}
-        {/* this will stick on margin-top:204px */}
         {/* Product media section */}
         <div className='lg:col-span-1 space-y-6'>
           <motion.div
@@ -403,11 +399,11 @@ export default function ProductPage() {
         </div>
       </div>
 
-      {relatedProducts?.data?.length > 0 && (
+      {relatedProducts && relatedProducts?.length > 0 && (
         <div className='mt-12'>
           <Title title='Related Products' />
           <div className='mt-5 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-5'>
-            {relatedProducts.data.map((relatedProduct: Product) => (
+            {relatedProducts?.map((relatedProduct: Product) => (
               <div
                 key={`related-product-${uuidv4()}`}
                 className='border rounded-lg overflow-hidden hover:shadow-lg transition-shadow'
@@ -415,7 +411,7 @@ export default function ProductPage() {
                 <div className='relative aspect-square'>
                   <Image
                     src={
-                      relatedProduct.images[0]?.image?.optimizeUrl ||
+                      relatedProduct.images[0]?.image?.secure_url ||
                       "/placeholder.png"
                     }
                     alt={relatedProduct.name}
@@ -424,7 +420,7 @@ export default function ProductPage() {
                     height={300}
                   />
                 </div>
-                <div className=''>
+                <div className='p-4'>
                   <h3 className='font-medium text-lg line-clamp-1 truncate'>
                     {relatedProduct.name}
                   </h3>
