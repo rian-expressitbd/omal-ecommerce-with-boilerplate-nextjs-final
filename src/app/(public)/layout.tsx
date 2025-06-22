@@ -1,9 +1,8 @@
 "use client";
 
-import Footer from "@/components/Footer/Footer";
-import NavbarLower from "@/components/Navbar/NavbarLower";
-import { NavbarMiddle } from "@/components/Navbar/NavbarMiddle";
-import NavbarUpper from "@/components/Navbar/NavbarUpper";
+
+import Footer from "@/components/Frontend/Footer";
+import Navbar from "@/components/Frontend/Navbar";
 import { useSidebar } from "@/hooks/useSidebar";
 import { navbarRef, sidebarRef } from "@/lib/refs";
 import { easeInOut, motion } from "motion/react";
@@ -132,9 +131,7 @@ export default function PublicLayout({
           willChange: "transform",
         }}
       >
-        <NavbarUpper />
-        <NavbarMiddle />
-        <NavbarLower />
+      <Navbar/>
       </motion.div>
 
       {/* <div className='relative flex flex-col w-svw'> */}
