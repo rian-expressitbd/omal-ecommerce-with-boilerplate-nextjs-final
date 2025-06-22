@@ -143,5 +143,5 @@ export const {
   useGetProductQuery,
   useCreateOnlineOrderMutation,
   useGetCategoriesQuery,
-  useGetProductsByCategoriesQuery,
+  useGetProductsByCategoriesQuery
 } = publicApi;

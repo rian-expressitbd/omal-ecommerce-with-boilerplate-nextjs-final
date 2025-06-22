@@ -17,6 +17,7 @@ export interface ProductImage {
 export interface Product {
   _id: string;
   name: string;
+
   short_description: string;
   long_description: string;
   total_stock: number;
@@ -25,6 +26,7 @@ export interface Product {
   variantsId: {
     _id: string;
     name?: string;
+    condition: string;
     variants_values: string[];
     selling_price: number;
     offer_price: number;
